@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+#Mine
+/android
+
 # Expo
 .expo/
 dist/

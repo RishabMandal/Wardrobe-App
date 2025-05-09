@@ -51,7 +51,7 @@ const Account = () => {
         {history.slice(0, 3).map((item) => (
           <View
             key={item.id}
-            className="bg-white rounded-xl p-2 mb-4 shadow-md"
+            className="bg-white rounded-xl p-2 mb-2 shadow-md border border-red-700"
           >
             <View className="flex-row items-center">
               {/* Thumbnail image */}

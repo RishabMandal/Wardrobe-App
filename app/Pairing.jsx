@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BlurView } from 'expo-blur';
 
 const options = [
   {
@@ -96,7 +97,7 @@ const Pairing = () => {
           <AnimatedPressable
             key={option.label}
             style={animatedStyle}
-            className="bg-white w-4/5 rounded-xl py-4 px-6 mb-4 shadow-md justify-center items-center flex-row space-x-4"
+            className="bg-white w-4/5 rounded-xl py-4 px-6 mb-4 shadow-md border border-red-700 justify-center items-center flex-row space-x-4"
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               if (option.label === "AI Suggested") router.push("/WearToday");

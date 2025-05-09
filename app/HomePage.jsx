@@ -44,20 +44,30 @@ export default function HomePage() {
     { name: "Green", hex: "#22c55e" },
     { name: "Black", hex: "#000000" },
     { name: "White", hex: "#f4f4f5" },
+    { name: "Yellow", hex: "#facc15" },
+    { name: "Purple", hex: "#a855f7" },
+    { name: "Orange", hex: "#fb923c" },
+    { name: "Pink", hex: "#ec4899" },
+    { name: "Gray", hex: "#6b7280" },
+    { name: "Brown", hex: "#92400e" },
+    { name: "Beige", hex: "#f5f5dc" },
+    { name: "Maroon", hex: "#7f1d1d" }
   ];
 
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      const data = await AsyncStorage.getItem("wardrobeItems");
+      // const data = await AsyncStorage.getItem("wardrobeItems");
+      const data = await AsyncStorage.getItem("clothes");
       if (data) setItems(JSON.parse(data));
     })();
   }, []);
 
   const saveItems = async (newItems) => {
     setItems(newItems);
-    await AsyncStorage.setItem("wardrobeItems", JSON.stringify(newItems));
+    // await AsyncStorage.setItem("wardrobeItems", JSON.stringify(newItems));
+    await AsyncStorage.setItem("clothes", JSON.stringify(newItems));
   };
 
   const pickImage = async () => {
@@ -129,7 +139,14 @@ export default function HomePage() {
         }, 400);
         handleDelete(item.id);
       }}
-      className="m-2 w-44 items-center mx-auto bg-white rounded-xl p-2 shadow-md"
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+        setTimeout(() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+        }, 200);
+        router.push({ pathname: `/${item.id}` });
+      }}
+      className="m-1 w-[11.5rem] items-center mx-auto bg-white rounded-xl p-2 shadow-md border border-red-700"
     >
       <Image
         source={{ uri: item.uri }}
@@ -169,8 +186,14 @@ export default function HomePage() {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             addToHistory({
               ...item,
+              id: `${item.id}_${new Date().getTime()}`, // Unique ID
               date: new Date().toLocaleDateString("en-GB"),
             });
+            Alert.alert(
+              "Saved to history",
+              `Item ${item?.name}, color ${item?.color} saved`,
+              [{ text: "Ok" }]
+            );
           }}
           className="bg-green-600 w-full flex-1 rounded-full px-3 py-1"
         >
@@ -326,7 +349,6 @@ export default function HomePage() {
                   }}
                 />
               )}
-
               <Text className="text-red-600 font-semibold">
                 Color: {colorFilter}
               </Text>
@@ -355,6 +377,11 @@ export default function HomePage() {
             </View>
           )}
         </View>
+        <View className="bg-white rounded-md px-4 py-3">
+          <Text className="text-red-600 font-semibold">
+            {filteredItems?.length}
+          </Text>
+        </View>
       </View>
       <View className="flex-row flex-wrap justify-between items-start gap-2 mb-4">
         {/* Category Picker */}
@@ -373,9 +400,23 @@ export default function HomePage() {
             <Picker.Item label="All Categories" value="All" />
             <Picker.Item label="Shirt" value="Shirt" />
             <Picker.Item label="Jeans" value="Jeans" />
+            <Picker.Item
+              label="Formal Wear(Shirt)"
+              value="Formal Wear(Shirt)"
+            />
+            <Picker.Item
+              label="Formal Wear(Trousers)"
+              value="Formal Wear(Trousers)"
+            />
+            <Picker.Item label="Home Wear(Shirt)" value="Home Wear(Shirt)" />
+            <Picker.Item
+              label="Home Wear(T-Shirt)"
+              value="Home Wear(T-Shirt)"
+            />
             <Picker.Item label="Jacket" value="Jacket" />
             <Picker.Item label="T-Shirt" value="T-Shirt" />
             <Picker.Item label="Pant" value="Pant" />
+            <Picker.Item label="Foot Wear" value="Foot Wear" />
           </Picker>
         </View>
       </View>
@@ -406,12 +447,12 @@ export default function HomePage() {
             <Text className="text-xl font-bold text-red-700 mb-4">
               Add Item Details
             </Text>
-
             <TextInput
               placeholder="Name"
               value={formData.name}
               onChangeText={(text) => setFormData({ ...formData, name: text })}
               className="border border-gray-300 px-4 py-2 rounded mb-3"
+              placeholderTextColor="#dc2626"
             />
             <TextInput
               placeholder="Category"
@@ -420,23 +461,30 @@ export default function HomePage() {
                 setFormData({ ...formData, category: text })
               }
               className="border border-gray-300 px-4 py-2 rounded mb-3"
+              placeholderTextColor="#dc2626"
             />
             <TextInput
               placeholder="Color"
               value={formData.color}
               onChangeText={(text) => setFormData({ ...formData, color: text })}
               className="border border-gray-300 px-4 py-2 rounded mb-4"
+              placeholderTextColor="#dc2626"
             />
 
             <TouchableOpacity
-              onPress={handleAddItem}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+                handleAddItem();
+              }}
               className="bg-red-600 py-3 rounded-xl mb-2 items-center"
             >
               <Text className="text-white font-bold">Save</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+                setModalVisible(false);
+              }}
               className="items-center"
             >
               <Text className="text-red-600 font-bold">Cancel</Text>

@@ -70,6 +70,7 @@ export const ClothProvider = ({ children }) => {
   const addToHistory = (clothingItem) => {
     const newEntry = {
       ...clothingItem,
+      // id: `${clothingItem.id}_${new Date().getTime()}`, // Unique ID
       date: new Date().toLocaleDateString("en-GB"),
     };
     setHistory((prev) => [newEntry, ...prev]);

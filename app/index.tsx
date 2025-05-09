@@ -1,4 +1,4 @@
-import { Image } from "expo-image";
+// import { Image } from "expo-image";
 import { Text, View } from "react-native";
 import HomePage from "./HomePage";
 import "../global.css";
