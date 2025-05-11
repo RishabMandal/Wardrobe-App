@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Picker } from "@react-native-picker/picker";
 import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -14,7 +15,7 @@ import { useCloths } from "./ClothContext";
 
 const ClothDetailedView = () => {
   const { id } = useLocalSearchParams(); // Get the 'id' from the URL params
-  const { clothes, setCloths } = useCloths(); // Access the clothes from context
+  const { clothes, setCloths, categories } = useCloths(); // Access the clothes from context
 
   // console.log(id);
   // console.log(clothes);
@@ -35,7 +36,7 @@ const ClothDetailedView = () => {
   // Handler to save the updated cloth name
   const handleSave = () => {
     if (name.trim()) {
-      const updatedCloth = { id: cloth?.id, name, category, color, uri }; // Update the cloth with new name
+      const updatedCloth = { id: cloth?.id, name, category, color, uri, starred }; // Update the cloth with new name
       setCloths(
         clothes.map((item) =>
           item.id === updatedCloth.id ? updatedCloth : item
@@ -45,6 +46,7 @@ const ClothDetailedView = () => {
   };
 
   const router = useRouter();
+  const showCustomInput = category === "Custom";
   return (
     <View
       className="bg-red-600 min-h-[120vh] p-4 pt-10"
@@ -108,7 +110,44 @@ const ClothDetailedView = () => {
             placeholder="Edit name"
             placeholderTextColor="gray"
           />
-          <TextInput
+          <View className="border rounded-xl border-red-700 mt-5">
+            <Picker
+              selectedValue={showCustomInput ? "Custom" : category}
+              onValueChange={(itemValue) => setCategory(itemValue)}
+              dropdownIconColor="#dc2626"
+              style={{
+                height: 52,
+                fontSize: 10,
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              {categories.map((cat) => (
+                <Picker.Item
+                  key={cat.value}
+                  label={cat.label}
+                  value={cat.value}
+                />
+              ))}
+            </Picker>
+
+            {showCustomInput && (
+              <TextInput
+                style={{
+                  borderWidth: 1,
+                  color: "white",
+                  padding: 10,
+                  marginTop: 20,
+                }}
+                className="rounded-xl border-red-700 bg-red-500 text-lg"
+                value={category}
+                onChangeText={setCategory}
+                placeholder="Enter your Custom category"
+                placeholderTextColor="gray"
+              />
+            )}
+          </View>
+          {/* <TextInput
             style={{
               borderWidth: 1,
               color: "white",
@@ -120,7 +159,7 @@ const ClothDetailedView = () => {
             onChangeText={setCategory}
             placeholder="Edit category"
             placeholderTextColor="gray"
-          />
+          /> */}
           <TextInput
             style={{
               borderWidth: 1,

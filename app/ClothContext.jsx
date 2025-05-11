@@ -7,6 +7,20 @@ const ClothContext = createContext();
 export const ClothProvider = ({ children }) => {
   const [clothes, setCloths] = useState([]);
   const [history, setHistory] = useState([]);
+  const [categories, setCategories] = useState([
+    { label: "📂 All Categories", value: "All" },
+    { label: "👕 Shirt", value: "Shirt" },
+    { label: "👖 Jeans", value: "Jeans" },
+    { label: "🧑‍💼 Formal Wear (Shirt)", value: "Formal Wear(Shirt)" },
+    { label: "🧑‍💼 Formal Wear (Trousers)", value: "Formal Wear(Trousers)" },
+    { label: "🏠 Home Wear (Shirt)", value: "Home Wear(Shirt)" },
+    { label: "🏠 Home Wear (T-Shirt)", value: "Home Wear(T-Shirt)" },
+    { label: "🧥 Jacket", value: "Jacket" },
+    { label: "👕 T-Shirt", value: "T-Shirt" },
+    { label: "👖 Pant", value: "Pant" },
+    { label: "👟 Foot Wear", value: "Foot Wear" },
+    { label: "Custom", value: "Custom" },
+  ]);
 
   // Load clothes from AsyncStorage
   useEffect(() => {
@@ -84,6 +98,8 @@ export const ClothProvider = ({ children }) => {
         history,
         setHistory,
         addToHistory, // expose helper
+        categories,
+        setCategories,
       }}
     >
       {children}

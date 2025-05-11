@@ -10,45 +10,38 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BlurView } from 'expo-blur';
 
 const options = [
-  {
-    label: "Favourites",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gOIXBME1kV-qz6cf45vdz-tfmiVjr8id-K7O-Ci0bZ2gy-MKFRx-awhIzKuYdLibkMg&usqp=CAU",
-  },
-  {
-    label: "Summer",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gOIXBME1kV-qz6cf45vdz-tfmiVjr8id-K7O-Ci0bZ2gy-MKFRx-awhIzKuYdLibkMg&usqp=CAU",
-  },
-  {
-    label: "Winter",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gOIXBME1kV-qz6cf45vdz-tfmiVjr8id-K7O-Ci0bZ2gy-MKFRx-awhIzKuYdLibkMg&usqp=CAU",
-  },
-  {
-    label: "Festive",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gOIXBME1kV-qz6cf45vdz-tfmiVjr8id-K7O-Ci0bZ2gy-MKFRx-awhIzKuYdLibkMg&usqp=CAU",
-  },
-  {
-    label: "Work",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gOIXBME1kV-qz6cf45vdz-tfmiVjr8id-K7O-Ci0bZ2gy-MKFRx-awhIzKuYdLibkMg&usqp=CAU",
-  },
-  {
-    label: "Home",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gOIXBME1kV-qz6cf45vdz-tfmiVjr8id-K7O-Ci0bZ2gy-MKFRx-awhIzKuYdLibkMg&usqp=CAU",
-  },
-  {
-    label: "AI Suggested",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gOIXBME1kV-qz6cf45vdz-tfmiVjr8id-K7O-Ci0bZ2gy-MKFRx-awhIzKuYdLibkMg&usqp=CAU",
-  },
-];
+    {
+      label: "Favourites",
+      emoji: "❤️",
+    },
+    {
+      label: "Summer",
+      emoji: "☀️",
+    },
+    {
+      label: "Winter",
+      emoji: "❄️",
+    },
+    {
+      label: "Festive",
+      emoji: "🎉",
+    },
+    {
+      label: "Work",
+      emoji: "💼",
+    },
+    {
+      label: "Home",
+      emoji: "🏠",
+    },
+    {
+      label: "AI Suggested",
+      emoji: "🤖",
+    },
+  ];
+  
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -67,9 +60,7 @@ const Pairing = () => {
             router.push("/");
           }}
         />
-        <Text className="text-white text-3xl font-bold">
-          Outfit Pairing
-        </Text>
+        <Text className="text-white text-3xl font-bold">Outfit Pairing</Text>
         <Ionicons name="mic-circle-outline" size={36} color="white" />
       </View>
 
@@ -97,17 +88,17 @@ const Pairing = () => {
           <AnimatedPressable
             key={option.label}
             style={animatedStyle}
-            className="bg-white w-4/5 rounded-xl py-4 px-6 mb-4 shadow-md border border-red-700 justify-center items-center flex-row space-x-4"
+            className="bg-white border-2 border-red-700 w-4/5 rounded-xl py-4 px-6 mb-4 shadow-lg border border-red-700 justify-center items-center flex-row space-x-4"
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              if (option.label === "AI Suggested") router.push("/WearToday");
+              if (option.label === "AI Suggested") router.push("/pairing/WearToday");
+              else if (option.label === "Favourites")
+                router.push("/pairing/Starred");
             }}
           >
-            <Image
-              src={option.image}
-              className="w-10 h-10"
-              resizeMode="contain"
-            />
+            <Text className="text-red-600 font-semibold text-xl pr-2">
+              {option.emoji}
+            </Text>
             <Text className="text-red-600 font-semibold text-xl">
               {option.label}
             </Text>

@@ -32,13 +32,13 @@ const History = () => {
     history.filter((entry) => entry.uri === uri).length;
 
   const renderItem = ({ item }) => (
-    <View className="bg-white rounded-xl p-4 mb-2 shadow-md border border-red-700">
-      <View className="flex-row items-center">
+    <View className="bg-white rounded-xl p-2 mb-2 shadow-md border border-red-700">
+      <View className="flex flex-row items-center">
         {/* Thumbnail image */}
         {item.uri ? (
           <Image
             source={{ uri: item.uri }}
-            className="w-36 h-44 rounded-md mr-4 border border-red-600"
+            className="w-36 h-full rounded-md mr-4 border border-red-600"
             resizeMode="cover"
           />
         ) : (
@@ -48,7 +48,7 @@ const History = () => {
         )}
 
         {/* Item details */}
-        <View>
+        <View className="flex-1">
           <View className="flex-1">
             <Text className="text-2xl font-semibold text-red-600">
               {item.name}
@@ -67,7 +67,7 @@ const History = () => {
 
           {/* Delete button */}
           <TouchableOpacity
-            className="bg-red-600 flex flex-row items-center justify-center rounded-lg p-3 gap-2"
+            className="bg-red-600 flex flex-row items-center justify-center rounded-lg p-3 gap-2 mt-2"
             onPress={() => handleDeleteFromHistory(item.id)}
           >
             <Text className="text-white font-semibold">Delete</Text>
