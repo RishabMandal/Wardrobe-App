@@ -136,6 +136,7 @@ const Starred = () => {
         </View>
         {/* <Text className="text-black text-xl">32'C</Text> */}
         {/* <Ionicons name="mic-circle-outline" size={36} color="black" /> */}
+        <Text className="text-white font-bold border-2 border-white rounded-full py-1 px-3">{filteredItems?.length}</Text>
       </View>
       <View className="">
         {filteredItems.length > 0 ? (

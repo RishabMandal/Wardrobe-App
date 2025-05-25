@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -29,6 +29,25 @@ const Filter = ({
   renderItem,
 }) => {
   const { categories } = useCloths();
+
+  // Loading skeleton
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading
+  useEffect(() => {
+    // Simulate a network request (replace this with actual data fetching)
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500); // 2 seconds loading
+  }, []);
+
+  // Show popover of count of categories
+  const [showPopover, setShowPopover] = useState(false);
+  const categoryCounts = filteredItems.reduce((acc, item) => {
+    acc[item.category] = (acc[item.category] || 0) + 1;
+    return acc;
+  }, {});
+
   return (
     <View className="bg-black min-h-screen p-4">
       <View className="bg-red-600 p-4 pt-6 rounded-b-3xl -mx-4 -mt-4 mb-4">
@@ -158,10 +177,32 @@ const Filter = ({
             </ScrollView>
           )}
         </View>
-        <View className="bg-[#303435] rounded-md px-4 py-3">
-          <Text className="text-red-600 font-semibold">
-            {filteredItems?.length}
-          </Text>
+        <View className="relative">
+          {/* Touchable box */}
+          <TouchableOpacity
+            onPress={() => setShowPopover(!showPopover)}
+            className="bg-[#303435] rounded-md px-4 py-3"
+          >
+            <Text className="text-red-600 font-semibold">
+              {filteredItems?.length}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Popover */}
+          {showPopover && (
+            <View className="absolute top-16 right-0 bg-[#1f1f1f] border border-gray-700 rounded-md p-3 z-50 w-56 shadow-lg">
+              <Text className="text-white font-bold mb-2">Categories</Text>
+              {Object.entries(categoryCounts).map(([category, count]) => (
+                <View
+                  key={category}
+                  className="flex flex-row justify-between py-1 border-b border-gray-700"
+                >
+                  <Text className="text-white">{category}</Text>
+                  <Text className="text-gray-400">{count}</Text>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       </View>
       <ScrollView className="h-[50vh]">
@@ -170,7 +211,7 @@ const Filter = ({
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (
               <View key={`rec-${item.id}`} className="w-[48%]">
-                {renderItem({ item })}
+                {renderItem({ item, isLoading })}
               </View>
             ))
           ) : (

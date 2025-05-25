@@ -19,7 +19,9 @@ export const ClothProvider = ({ children }) => {
     { label: "👕 T-Shirt", value: "T-Shirt" },
     { label: "👖 Pant", value: "Pant" },
     { label: "👟 Foot Wear", value: "Foot Wear" },
-    { label: "Custom", value: "Custom" },
+    { label: "🧦 Socks", value: "Socks" },
+    { label: "🧻 Handkerchief", value: "Handkerchief" },
+    { label: "Custom (Not developed yet)", value: "Custom" },
   ]);
 
   // Load clothes from AsyncStorage

@@ -5,6 +5,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
+  Modal,
   Switch,
   Text,
   TextInput,
@@ -36,7 +37,14 @@ const ClothDetailedView = () => {
   // Handler to save the updated cloth name
   const handleSave = () => {
     if (name.trim()) {
-      const updatedCloth = { id: cloth?.id, name, category, color, uri, starred }; // Update the cloth with new name
+      const updatedCloth = {
+        id: cloth?.id,
+        name,
+        category,
+        color,
+        uri,
+        starred,
+      }; // Update the cloth with new name
       setCloths(
         clothes.map((item) =>
           item.id === updatedCloth.id ? updatedCloth : item
@@ -47,6 +55,11 @@ const ClothDetailedView = () => {
 
   const router = useRouter();
   const showCustomInput = category === "Custom";
+  const [customCategory, setCustomCategory] = useState(category);
+
+  // Image expander
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View
       className="bg-red-600 min-h-[120vh] p-4 pt-10"
@@ -68,10 +81,40 @@ const ClothDetailedView = () => {
       {cloth ? (
         <>
           <View className="flex flex-row gap-3">
-            <Image
-              source={{ uri: uri }}
-              className="w-1/2 h-full rounded-md border-2 object-contain border-red-500"
-            />
+            <TouchableOpacity
+              className="w-1/2 h-52 rounded-md border-2 border-red-500"
+              onPress={() => {
+                setModalVisible(true);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }}
+            >
+              <Image
+                source={{ uri: uri }}
+                className="w-full h-full rounded-md border-2 object-contain border-red-500"
+              />
+            </TouchableOpacity>
+            {/* Fullscreen Modal */}
+            <Modal visible={modalVisible} transparent={true}>
+              <View className="flex-1 bg-black bg-opacity-90 justify-center items-center">
+                <TouchableOpacity
+                  className="flex-1 justify-center items-center w-full"
+                  onPress={() => {
+                    setModalVisible(false);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  }}
+                  activeOpacity={1}
+                >
+                  <Image
+                    source={{ uri }}
+                    className="w-full h-4/5"
+                    resizeMode="contain"
+                  />
+                  <Text className="text-white mt-4 text-base">
+                    Tap anywhere to close
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
             <View className="w-1/2">
               <Text className="text-white">Item Name</Text>
               <Text
@@ -140,8 +183,8 @@ const ClothDetailedView = () => {
                   marginTop: 20,
                 }}
                 className="rounded-xl border-red-700 bg-red-500 text-lg"
-                value={category}
-                onChangeText={setCategory}
+                value={customCategory}
+                onChangeText={setCustomCategory}
                 placeholder="Enter your Custom category"
                 placeholderTextColor="gray"
               />
