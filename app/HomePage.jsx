@@ -404,7 +404,13 @@ export default function HomePage() {
               contentContainerStyle={{ gap: 12 }}
               className="w-[150vw]"
             >
-              <View className="w-[85vw] bg-[#303435] rounded-2xl p-4 relative">
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/suggestions/PackingAssistant");
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }}
+                className="w-[85vw] bg-[#303435] rounded-2xl p-4 relative"
+              >
                 {/* Top-right circular arrow */}
                 <TouchableOpacity
                   onPress={() => {
@@ -423,8 +429,8 @@ export default function HomePage() {
                     duration, and weather)
                   </Text>
                 </View>
-              </View>
-              {filteredItems.slice(0, 2).map((item) => (
+              </TouchableOpacity>
+              {filteredItems.slice(0, 1).map((item) => (
                 <View
                   key={item.id}
                   className="w-[85vw] bg-[#303435] rounded-2xl p-4 relative"
@@ -498,7 +504,9 @@ export default function HomePage() {
             <TextInput
               placeholder="Color"
               value={formData.color}
-              onChangeText={(text) => setFormData({ ...formData, color: text })}
+              onChangeText={(text) =>
+                setFormData({ ...formData, color: text })
+              }
               className="border border-gray-300 px-4 py-2 rounded mb-4"
               placeholderTextColor="#dc2626"
             />
@@ -542,17 +550,16 @@ export default function HomePage() {
         <TouchableOpacity
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            pickImage();
+            router.push("/History");
           }}
           className="px-3 py-2 rounded-xl items-center justify-center flex-1 mx-1"
         >
-          <MaterialIcons name="photo-library" size={24} color="white" />
-          <Text className="text-white text-xs font-semibold">Gallery</Text>
+          <MaterialIcons name="history" size={24} color="white" />
+          <Text className="text-white text-xs font-semibold">History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            // pickImage();
             router.push("/Closet");
           }}
           className="px-3 py-2 rounded-xl items-center justify-center flex-1 mx-1"

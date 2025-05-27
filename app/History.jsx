@@ -5,6 +5,7 @@ import React, { useMemo, useState } from "react";
 import {
   FlatList,
   Image,
+  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
@@ -32,7 +33,16 @@ const History = () => {
     history.filter((entry) => entry.uri === uri).length;
 
   const renderItem = ({ item }) => (
-    <View className="bg-white rounded-xl p-2 mb-2 shadow-md border border-red-700">
+    <Pressable
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+        setTimeout(() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+        }, 200);
+        router.push(`/${item.id.split("_")[0]}`);
+      }}
+      className="bg-white rounded-xl p-2 mb-2 shadow-md border border-red-700"
+    >
       <View className="flex flex-row items-center">
         {/* Thumbnail image */}
         {item.uri ? (
@@ -75,7 +85,7 @@ const History = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 
   const [sortBy, setSortBy] = useState("date"); // 'name', 'date', 'count'

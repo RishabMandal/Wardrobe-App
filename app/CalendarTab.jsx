@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { useCloths } from "./ClothContext";
 
@@ -98,8 +98,15 @@ const CalendarTab = () => {
       <ScrollView className="space-y-4">
         {itemsForSelectedDate.length > 0 ? (
           itemsForSelectedDate.map((item) => (
-            <View
+            <Pressable
               key={item.id}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+                setTimeout(() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+                }, 200);
+                router.push(`/${item.id.split("_")[0]}`);
+              }}
               className="bg-white/10 rounded-xl p-4 m-1 flex-row items-center"
             >
               <Image
@@ -115,7 +122,7 @@ const CalendarTab = () => {
                   {item.category} • {item.color}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           ))
         ) : (
           <Text className="text-gray-400 text-center mt-10">
