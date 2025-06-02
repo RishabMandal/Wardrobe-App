@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useCloths } from "./ClothContext";
 
 const Account = () => {
@@ -96,12 +96,13 @@ const Account = () => {
         className="bg-white rounded-lg p-3 mb-4 shadow-md border border-red-700"
         onPress={() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          Alert.alert("Not made yet");
-          // router.push("/History");
+          router.push("/Analytics");
         }}
       >
         <View className="flex flex-row items-center justify-between">
-          <Text className="text-red-600 font-semibold text-lg">Customize</Text>
+          <Text className="text-red-600 font-semibold text-lg">
+            Analytics and Customization
+          </Text>
           <Ionicons name="chevron-forward-outline" size={24} color="#DC2626" />
         </View>
       </TouchableOpacity>

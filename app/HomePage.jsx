@@ -1,7 +1,9 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
+import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   Alert,
@@ -13,9 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-import * as Haptics from "expo-haptics";
-import { useRouter } from "expo-router";
+import { authenticateWithBiometrics } from "../components/biometricAuth";
 import Filter from "../components/Filter";
 import { useCloths } from "./ClothContext";
 
@@ -53,12 +53,12 @@ export default function HomePage() {
     { name: "Beige", hex: "#f5f5dc" },
     { name: "Maroon", hex: "#7f1d1d" },
   ];
+  const { addToHistory, biometrics, clothes, setCloths } = useCloths();
 
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      // const data = await AsyncStorage.getItem("wardrobeItems");
       const data = await AsyncStorage.getItem("clothes");
       if (data) setItems(JSON.parse(data));
     })();
@@ -66,7 +66,7 @@ export default function HomePage() {
 
   const saveItems = async (newItems) => {
     setItems(newItems);
-    // await AsyncStorage.setItem("wardrobeItems", JSON.stringify(newItems));
+    setCloths(newItems);
     await AsyncStorage.setItem("clothes", JSON.stringify(newItems));
   };
 
@@ -98,17 +98,23 @@ export default function HomePage() {
     setModalVisible(false);
   };
 
-  const handleDelete = (id) => {
-    Alert.alert("Delete?", "Are you sure?", [
-      { text: "Cancel" },
-      {
-        text: "Delete",
-        onPress: async () => {
-          const updated = items.filter((item) => item.id !== id);
-          saveItems(updated);
+  const handleDelete = async (id) => {
+    const isAuthenticated = await authenticateWithBiometrics();
+    if (isAuthenticated) {
+      // console.log("User authenticated");
+      Alert.alert("Delete?", "Are you sure?", [
+        { text: "Cancel" },
+        {
+          text: "Delete",
+          onPress: async () => {
+            const updated = items.filter((item) => item.id !== id);
+            saveItems(updated);
+          },
         },
-      },
-    ]);
+      ]);
+    } else {
+      // console.log("Authentication failed");
+    }
   };
 
   const filteredItems = items
@@ -121,7 +127,7 @@ export default function HomePage() {
     .filter((item) =>
       colorFilter === "All"
         ? true
-        : item.color.toLowerCase() === colorFilter.toLowerCase()
+        : item.color.toLowerCase().includes(colorFilter.toLowerCase())
     )
     .sort((a, b) =>
       sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
@@ -278,8 +284,6 @@ export default function HomePage() {
     }, 1000);
   }, []);
 
-  const { addToHistory } = useCloths();
-
   const [filterVisible, setFilterVisible] = useState(false);
 
   return (
@@ -293,7 +297,7 @@ export default function HomePage() {
               color="white"
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                router.push("/Pairing");
+                router.push("/Notify");
               }}
             />
           </View>
@@ -504,9 +508,7 @@ export default function HomePage() {
             <TextInput
               placeholder="Color"
               value={formData.color}
-              onChangeText={(text) =>
-                setFormData({ ...formData, color: text })
-              }
+              onChangeText={(text) => setFormData({ ...formData, color: text })}
               className="border border-gray-300 px-4 py-2 rounded mb-4"
               placeholderTextColor="#dc2626"
             />
@@ -585,7 +587,10 @@ export default function HomePage() {
         visible={filterVisible}
         animationType="slide"
         transparent
-        onRequestClose={() => setFilterVisible(false)}
+        onRequestClose={() => {
+          setCategoryFilter("All");
+          setFilterVisible(false);
+        }}
       >
         <View>
           <Filter

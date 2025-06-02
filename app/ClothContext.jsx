@@ -49,7 +49,6 @@ export const ClothProvider = ({ children }) => {
         console.error("Error saving clothes to AsyncStorage:", error);
       }
     };
-
     if (clothes.length > 0) {
       saveCloths();
     }
@@ -92,6 +91,8 @@ export const ClothProvider = ({ children }) => {
     setHistory((prev) => [newEntry, ...prev]);
   };
 
+  const [biometrics, setBiometrics] = useState(false);
+
   return (
     <ClothContext.Provider
       value={{
@@ -102,6 +103,8 @@ export const ClothProvider = ({ children }) => {
         addToHistory, // expose helper
         categories,
         setCategories,
+        biometrics,
+        setBiometrics,
       }}
     >
       {children}

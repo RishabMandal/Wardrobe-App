@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
@@ -132,7 +132,8 @@ const History = () => {
           }}
         />
         <Text className="text-white text-3xl font-bold">History</Text>
-        <Ionicons name="mic-circle-outline" size={36} color="white" />
+        <MaterialCommunityIcons name="delete-empty" size={24} className="border-2 border-white rounded-2xl" color="white" />
+        {/* <Ionicons name="mic-circle-outline" size={36} color="white" /> */}
       </View>
       <View className="relative w-full mb-3">
         <TextInput

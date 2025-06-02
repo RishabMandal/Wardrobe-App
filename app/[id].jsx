@@ -16,10 +16,7 @@ import { useCloths } from "./ClothContext";
 
 const ClothDetailedView = () => {
   const { id } = useLocalSearchParams(); // Get the 'id' from the URL params
-  const { clothes, setCloths, categories } = useCloths(); // Access the clothes from context
-
-  // console.log(id);
-  // console.log(clothes);
+  const { clothes, setCloths, categories, history } = useCloths(); // Access the clothes from context
 
   // Find the cloth by its id
   const cloth = clothes.find(
@@ -139,6 +136,10 @@ const ClothDetailedView = () => {
               </Text>
             </View>
           </View>
+          <Text className="text-white mt-4 font-semibold text-lg">
+            This item was worn{" "}
+            {history.filter((cloth) => cloth.id.split("_")[0] === id).length} time(s)
+          </Text>
           {/* Editable TextInput for the name */}
           <TextInput
             style={{
